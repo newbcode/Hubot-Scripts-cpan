@@ -1,4 +1,4 @@
-package Hubot::Scripts::perlstudy;
+package Hubot::Scripts::cpan;
 
 use utf8;
 use strict;
@@ -9,16 +9,32 @@ use Data::Printer;
 
 sub load {
     my ( $class, $robot ) = @_;
-    my $flag = 'off';
- 
+
     $robot->hear(
         qr/(\w+::\w+)/i,    
+        \&cpan_serach,
     );
 }
 
 sub cpan_serach {
     my $msg = shift;
     my $user_input = $msg->match->[0];
+
+    my $ua = LWP::UserAgent->new;
+
+    my $rep = $ua->get("https://metacpan.org/search?q=$user_input");
+    #my $rep = $ua->get("http://search.cpan.org/search?mode=all&query=$user_input");
+   
+    if ($rep->is_success) {
+        #my @info_name = $rep->decoded_content =~ m{<a href="/module/$user_input">(.*?)</a>}gsm;
+        if ( $rep->decoded_content =~ m{<a
+                href="/module/$user_input">$user_input</a>(.*?).*?</strong>}gsm ) {
+            print "$1\n";
+        }
+    }
+    else {
+        die $rep->status_line;
+    }
 }
 
 1;
