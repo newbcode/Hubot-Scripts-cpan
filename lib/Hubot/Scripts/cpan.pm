@@ -23,14 +23,23 @@ sub cpan_serach {
     my $ua = LWP::UserAgent->new;
 
     my $rep = $ua->get("https://metacpan.org/search?q=$user_input");
-    #my $rep = $ua->get("http://search.cpan.org/search?mode=all&query=$user_input");
    
     if ($rep->is_success) {
-        #my @info_name = $rep->decoded_content =~ m{<a href="/module/$user_input">(.*?)</a>}gsm;
-        if ( $rep->decoded_content =~ m{<a
-                href="/module/$user_input">$user_input</a>(.*?).*?</strong>}gsm ) {
-            print "$1\n";
+        my ( $title, $desc, $author, $release, $relatize );
+        if ( $rep->decoded_content =~ m{<a href="/module/$user_input">$user_input</a>(.*?)$}gsm ) { $title = $1; }
+        if ( $rep->decoded_content =~ m{<p class="description">(.*?)</p>}gsm ) { $desc = $1; }
+        if ( $rep->decoded_content =~ m{<a class="author" href="/author/.*?">(.*?)</a><a href=".*?">(.*?)</a>}gsm ) {
+           $author = $1;
+           $release = $2;
         }
+        if ( $rep->decoded_content =~ m{<span class="relatize">(.*?)</span>}gsm ) { $relatize = $1; }
+
+        $desc =~ s/&quot\;/"/g; 
+        $desc =~ s/&gt\;/>/g;
+
+        $msg->send("$user_input - [$title]");
+        $msg->send("Desription  - [$desc] ");
+        $msg->send("Author - [$author]"."Release:[$release] - [$relatize]");
     }
     else {
         die $rep->status_line;
