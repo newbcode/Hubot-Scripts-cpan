@@ -59,11 +59,8 @@ sub cpan_serach {
  
 =head1 SYNOPSIS
 
-    naver perl cafe (new issue) monitoring.
-    perlstudy on - naver cafe(perlstudy) to start monitoring.
-    perlstudy off|finsh - naver cafe(perlstudy) to stop monitoring.
-    perlstudy status - naver cafe(perlstudy) status.
- 
+    cpan module search.
+
 =head1 AUTHOR
 
     YunChang Kang <codenewb@gmail.com>
