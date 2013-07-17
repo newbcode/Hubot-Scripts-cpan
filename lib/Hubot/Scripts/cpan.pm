@@ -14,6 +14,8 @@ sub load {
         qr/(\w+::\w+)/i,    
         \&cpan_serach,
     );
+
+
 }
 
 sub cpan_serach {
@@ -34,12 +36,13 @@ sub cpan_serach {
         }
         if ( $rep->decoded_content =~ m{<span class="relatize">(.*?)</span>}gsm ) { $relatize = $1; }
 
-        $desc =~ s/&quot\;/"/g; 
-        $desc =~ s/&gt\;/>/g;
-
-        $msg->send("$user_input - [$title]");
-        $msg->send("Desription  - [$desc] ");
-        $msg->send("Author - [$author]"."Release:[$release] - [$relatize]");
+        if ( $title ) {
+            $desc =~ s/&quot\;/"/g; 
+            $desc =~ s/&gt\;/>/g;
+            $msg->send("$user_input - [$title]");
+            $msg->send("Desription  - [$desc] ");
+            $msg->send("Author - [$author]"." Release:[$release] - [$relatize]");
+        }
     }
     else {
         die $rep->status_line;
