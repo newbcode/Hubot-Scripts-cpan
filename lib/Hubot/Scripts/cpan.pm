@@ -11,7 +11,8 @@ sub load {
     my ( $class, $robot ) = @_;
 
     $robot->hear(
-        qr/(\w+::\w+)/i,    
+#qr/(\w+::\w+)/i,    
+        qr/cpan (.+)/i,    
         \&cpan_serach,
     );
 
@@ -60,6 +61,7 @@ sub cpan_serach {
 =head1 SYNOPSIS
 
     cpan module search.
+    cpan <module name>.
 
 =head1 AUTHOR
 
