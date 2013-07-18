@@ -11,8 +11,7 @@ sub load {
     my ( $class, $robot ) = @_;
 
     $robot->hear(
-#qr/(\w+::\w+)/i,    
-        qr/cpan (.+)/i,    
+        qr/(\w+::\w+)/i,    
         \&cpan_serach,
     );
 
