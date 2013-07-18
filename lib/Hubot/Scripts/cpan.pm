@@ -11,7 +11,7 @@ sub load {
     my ( $class, $robot ) = @_;
 
     $robot->hear(
-        qr/(\w+::\w+)/i,    
+        qr/(\w+::\w+$|\w+::\w+::\w+)/i,    
         \&cpan_serach,
     );
 
@@ -24,7 +24,7 @@ sub cpan_serach {
 
     my $ua = LWP::UserAgent->new;
 
-    my $rep = $ua->get("https://metacpan.org/module/$user_input");
+    my $rep = $ua->get("https://metacpan.org/search?q=$user_input");
    
     if ($rep->is_success) {
         my ( $title, $desc, $author, $release, $relatize );
